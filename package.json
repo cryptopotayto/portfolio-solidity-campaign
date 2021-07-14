@@ -1,0 +1,29 @@
+{
+  "name": "campaign",
+  "version": "0.0.1",
+  "description": "portfolio solidity project",
+  "main": "compile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git remote -v"
+  },
+  "keywords": [
+    "learning",
+    "portfolio",
+    "solidity",
+    "javascript",
+    "react",
+    "node.js",
+    "ethereum",
+    "smart",
+    "contracts"
+  ],
+  "author": "Taylor R Craig",
+  "license": "ISC"
+}
