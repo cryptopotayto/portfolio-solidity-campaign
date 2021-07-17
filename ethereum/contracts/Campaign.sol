@@ -146,9 +146,29 @@ contract Campaign {
         
         request.complete = true;
         
+        numRequests = numRequests--;
         
     }
+
+    //unified function to call all applicable information from deployed contract
+
+    function getSummary() public view returns (uint, uint, uint, uint, address) {
+
+        return(
+
+            minimumContribution,
+            address(this).balance,
+            numRequests,
+            approversCount,
+            manager
+            
+        );
+
+    }
     
+    function getRequestsCount() public view returns (uint) {
+        return numRequests;
+    }
 }
 
     
