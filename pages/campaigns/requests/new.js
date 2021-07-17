@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
-import Layout from '../../components/Layout';
+import Layout from '../../../components/Layout';
 import { Form, Button, Input, Message } from 'semantic-ui-react';
-import factory from '../../ethereum/factory';
+import factory from '../../../ethereum/factory';
 import web3 from '../../ethereum/web3';
 import { Router } from '../../routes';
 
+class RequestNew extends Component {
+	
+	static async getInitialProps(props) {
+		//generates campaign object from passed in address at url
+		const { address } = props.query;
+		return {address};
+	}
 
-class CampaignNew extends Component {
+
 	state = {
-		minimumContribution: '',
+		requestCost: '',
+		description: '',
+		recipient: '',
 		errorMessage:'',
 		loading: false
 	}
@@ -40,17 +49,39 @@ class CampaignNew extends Component {
 
 				<Form onSubmit={this.onSubmit} error={this.state.errorMessage}>
 					<Form.Field>
-						<label>Minimum Contribution</label>
+						<label>Payment Proposal</label>
 						<Input 
-							label="wei" 
-							labelPosition="right" 
-							placeholder="amount in Wei"
-							value = {this.state.minimumContribution}
+							placeholder="enter proposal here"
+							value = {this.state.description}
 							onChange={event => 
 								this.setState({
-									minimumContribution: event.target.value
+									description: event.target.value
+								})}						
+						/>
+					</Form.Field>
+					<Form.Field>
+						<label>Request Cost</label>
+						<Input 
+							label="ether" 
+							labelPosition="right" 
+							placeholder="amount in Ether"
+							value = {this.state.requestCost}
+							onChange={event => 
+								this.setState({
+									requestCost: event.target.value
 								})}
 						 />
+					</Form.Field>
+					<Form.Field>
+						<label>Recipient</label>
+						<Input 
+							placeholder="recipient address"
+							value = {this.state.recipient}
+							onChange={event => 
+								this.setState({
+									recipient: event.target.value
+								})}
+						/>
 					</Form.Field>
 
 					<Message error header="Oops!" content={this.state.errorMessage} />
@@ -62,4 +93,4 @@ class CampaignNew extends Component {
 	}
 }
 
-export default CampaignNew;
+export default RequestNew;
