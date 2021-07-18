@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import Layout from '../../../components/Layout';
-import { Form, Button, Input, Message } from 'semantic-ui-react';
-import factory from '../../../ethereum/factory';
-import web3 from '../../ethereum/web3';
-import { Router } from '../../routes';
+import { Button, Message, Form, Input  } from 'semantic-ui-react';
+import { Link } from '../../../routes';
+import web3 from '../../../ethereum/web3';
+import campaignInstance from '../../../ethereum/campaign';
+import { Router } from '../../../routes';
 
-class RequestNew extends Component {
-	
-	static async getInitialProps(props) {
+
+
+
+class NewRequest extends Component {
+
+static async getInitialProps(props) {
 		//generates campaign object from passed in address at url
 		const { address } = props.query;
 		return {address};
@@ -25,17 +29,21 @@ class RequestNew extends Component {
 	onSubmit = async (event) => {
 		//set state to loading whenever the user clicks on the create button
 		event.preventDefault();
+		const campaign = campaignInstance(this.props.address);
+		const {
+			description,
+			requestCost,
+			recipient
+		} = this.state;
+
 		this.setState({ loading: true, errorMessage: ''});
 		try {
-
-
 			const accounts = await web3.eth.getAccounts();
 
-			await factory.methods
-			.createCampaign(this.state.minimumContribution)
-			.send({from: accounts[0]});
-
-			Router.pushRoute('/');
+			await campaign.methods.createRequest(description, web3.utils.toWei(requestCost, 'ether'), recipient).send({
+				from: accounts[0]
+			});
+			Router.pushRoute(`/campaigns/${this.props.address}/requests`);
 		} catch  (err) {
 			this.setState({ errorMessage: err.message });
 		}
@@ -45,7 +53,7 @@ class RequestNew extends Component {
 	render () {
 		return (
 			<Layout>
-				<h3>Create a New Campaign</h3>
+				<h3>Create a New Request</h3>
 
 				<Form onSubmit={this.onSubmit} error={this.state.errorMessage}>
 					<Form.Field>
@@ -93,4 +101,4 @@ class RequestNew extends Component {
 	}
 }
 
-export default RequestNew;
+export default NewRequest;
